@@ -3,6 +3,7 @@ export interface StatClass {
   roleName: string;
   attributes: string[];
   totalPoints: number;
+  maxPointsPerAttribute: number;
 }
 
 export interface StatSpread {
@@ -13,6 +14,7 @@ export interface StatSpread {
   attributes: string[];
   points: Record<string, number>;
   totalPoints: number;
+  maxPointsPerAttribute: number;
 }
 
 export interface PartySpread {
@@ -31,6 +33,7 @@ export interface EncodedClass {
   r: string; // roleName
   a: string[]; // attributes
   t: number; // totalPoints
+  m?: number; // maxPointsPerAttribute (optional for backwards compatibility)
 }
 
 export interface EncodedStatSpread {
@@ -39,6 +42,7 @@ export interface EncodedStatSpread {
   a: string[]; // attributes
   p: Record<string, number>; // points
   t: number; // totalPoints
+  m?: number; // maxPointsPerAttribute (optional for backwards compatibility)
 }
 
 export interface EncodedParty {

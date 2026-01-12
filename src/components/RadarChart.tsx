@@ -107,14 +107,13 @@ export function RadarChart({
 
         {/* Data polygon */}
         <motion.polygon
-          points={polygonPoints}
           fill="url(#fillGradient)"
           stroke={color}
           strokeWidth="2"
           strokeLinejoin="round"
-          initial={animated ? { opacity: 0, scale: 0.5 } : undefined}
-          animate={animated ? { opacity: 1, scale: 1 } : undefined}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          initial={animated ? { opacity: 0, scale: 0.5, points: polygonPoints } : { points: polygonPoints }}
+          animate={animated ? { opacity: 1, scale: 1, points: polygonPoints } : { points: polygonPoints }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
         />
 
         {/* Data points */}
@@ -124,15 +123,13 @@ export function RadarChart({
           return (
             <motion.circle
               key={attr}
-              cx={point.x}
-              cy={point.y}
               r="5"
               fill={color}
               stroke="white"
               strokeWidth="2"
-              initial={animated ? { opacity: 0, scale: 0 } : undefined}
-              animate={animated ? { opacity: 1, scale: 1 } : undefined}
-              transition={{ duration: 0.3, delay: i * 0.05 }}
+              initial={animated ? { opacity: 0, scale: 0, cx: center, cy: center } : { cx: point.x, cy: point.y }}
+              animate={animated ? { opacity: 1, scale: 1, cx: point.x, cy: point.y } : { cx: point.x, cy: point.y }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
             />
           );
         })}

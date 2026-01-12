@@ -35,6 +35,7 @@ export function encodeClass(statClass: StatClass): string {
     r: statClass.roleName,
     a: statClass.attributes,
     t: statClass.totalPoints,
+    m: statClass.maxPointsPerAttribute,
   };
   return encodeBase64Url(JSON.stringify(encoded));
 }
@@ -48,6 +49,7 @@ export function decodeClass(encoded: string): StatClass | null {
       roleName: data.r,
       attributes: data.a,
       totalPoints: data.t,
+      maxPointsPerAttribute: data.m ?? 10, // Default to 10 for backwards compatibility
     };
   } catch {
     return null;
@@ -62,6 +64,7 @@ export function encodeStatSpread(spread: StatSpread): string {
     a: spread.attributes,
     p: spread.points,
     t: spread.totalPoints,
+    m: spread.maxPointsPerAttribute,
   };
   return encodeBase64Url(JSON.stringify(encoded));
 }
@@ -78,6 +81,7 @@ export function decodeStatSpread(encoded: string): StatSpread | null {
       attributes: data.a,
       points: data.p,
       totalPoints: data.t,
+      maxPointsPerAttribute: data.m ?? 10, // Default to 10 for backwards compatibility
     };
   } catch {
     return null;
@@ -93,6 +97,7 @@ export function encodeParty(party: PartySpread): string {
       a: member.attributes,
       p: member.points,
       t: member.totalPoints,
+      m: member.maxPointsPerAttribute,
     })),
   };
   return encodeBase64Url(JSON.stringify(encoded));
@@ -110,6 +115,7 @@ export function decodeParty(encoded: string): PartySpread | null {
       attributes: m.a,
       points: m.p,
       totalPoints: m.t,
+      maxPointsPerAttribute: m.m ?? 10, // Default to 10 for backwards compatibility
     }));
     
     // Calculate aggregated stats

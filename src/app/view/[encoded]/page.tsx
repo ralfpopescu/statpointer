@@ -100,7 +100,7 @@ export default function ViewStatsPage() {
             <RadarChart
               attributes={spread.attributes}
               values={spread.points}
-              maxValue={10}
+              maxValue={spread.maxPointsPerAttribute}
               size={300}
               showLabels={true}
               animated={true}
@@ -111,7 +111,7 @@ export default function ViewStatsPage() {
           <div className="space-y-3 mb-8">
             {spread.attributes.map((attr, index) => {
               const value = spread.points[attr] || 0;
-              const percentage = (value / 10) * 100;
+              const percentage = (value / spread.maxPointsPerAttribute) * 100;
               
               return (
                 <motion.div

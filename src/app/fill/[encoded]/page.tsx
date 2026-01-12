@@ -49,10 +49,11 @@ export default function FillStatsPage() {
 
   // Calculate max possible value for an attribute
   const getMaxForAttribute = useCallback((attr: string) => {
+    if (!statClass) return 0;
     const currentValue = points[attr] || 0;
-    // Max is either 10 or current + remaining, whichever is smaller
-    return Math.min(10, currentValue + remainingPoints);
-  }, [points, remainingPoints]);
+    // Max is either maxPointsPerAttribute or current + remaining, whichever is smaller
+    return Math.min(statClass.maxPointsPerAttribute, currentValue + remainingPoints);
+  }, [statClass, points, remainingPoints]);
 
   const handlePointChange = useCallback((attr: string, value: number) => {
     setPoints(prev => ({
@@ -72,6 +73,7 @@ export default function FillStatsPage() {
       attributes: statClass.attributes,
       points,
       totalPoints: statClass.totalPoints,
+      maxPointsPerAttribute: statClass.maxPointsPerAttribute,
     };
 
     const encodedSpread = encodeStatSpread(spread);
@@ -182,6 +184,7 @@ export default function FillStatsPage() {
                     onChange={(value) => handlePointChange(attr, value)}
                     min={0}
                     max={getMaxForAttribute(attr)}
+                    absoluteMax={statClass.maxPointsPerAttribute}
                     size="sm"
                     showBar={true}
                   />
@@ -235,7 +238,7 @@ export default function FillStatsPage() {
               <RadarChart
                 attributes={statClass.attributes}
                 values={points}
-                maxValue={10}
+                maxValue={statClass.maxPointsPerAttribute}
                 size={300}
                 showLabels={true}
               />

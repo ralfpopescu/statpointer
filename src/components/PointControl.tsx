@@ -8,6 +8,8 @@ interface PointControlProps {
   onChange: (value: number) => void;
   min?: number;
   max?: number;
+  /** The absolute maximum for bar display (defaults to max). Use this when max is dynamic but bar should show progress toward a fixed total. */
+  absoluteMax?: number;
   label?: string;
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
@@ -19,6 +21,7 @@ export function PointControl({
   onChange,
   min = 0,
   max = 10,
+  absoluteMax,
   label,
   disabled = false,
   size = 'md',
@@ -52,7 +55,9 @@ export function PointControl({
   };
 
   const s = sizeClasses[size];
-  const percentage = ((value - min) / (max - min)) * 100;
+  // Use absoluteMax for bar display if provided, otherwise fall back to max
+  const barMax = absoluteMax ?? max;
+  const percentage = barMax > min ? ((value - min) / (barMax - min)) * 100 : 0;
 
   return (
     <div className={`flex flex-col ${s.container}`}>

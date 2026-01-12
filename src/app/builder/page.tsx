@@ -27,6 +27,7 @@ export default function BuilderPage() {
   const [roleName, setRoleName] = useState('My Class');
   const [attributes, setAttributes] = useState<string[]>(() => getRandomPlaceholders(3));
   const [totalPoints, setTotalPoints] = useState(15);
+  const [maxPointsPerAttribute, setMaxPointsPerAttribute] = useState(10);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -60,6 +61,7 @@ export default function BuilderPage() {
       roleName,
       attributes,
       totalPoints,
+      maxPointsPerAttribute,
     };
     const encoded = encodeClass(classData);
     const url = `${window.location.origin}/fill/${encoded}`;
@@ -71,13 +73,13 @@ export default function BuilderPage() {
     } catch (err) {
       console.error('Failed to copy:', err);
     }
-  }, [roleName, attributes, totalPoints]);
+  }, [roleName, attributes, totalPoints, maxPointsPerAttribute]);
 
   // Preview values for radar chart
   const previewValues = attributes.reduce((acc, attr, i) => {
     const baseValue = Math.ceil(totalPoints / attributes.length);
     const variance = i % 2 === 0 ? 1 : -1;
-    acc[attr] = Math.max(1, Math.min(baseValue + variance, 10));
+    acc[attr] = Math.max(1, Math.min(baseValue + variance, maxPointsPerAttribute));
     return acc;
   }, {} as Record<string, number>);
 
@@ -140,11 +142,27 @@ export default function BuilderPage() {
                 value={totalPoints}
                 onChange={setTotalPoints}
                 min={5}
-                max={50}
+                max={100}
                 size="md"
                 showBar={false}
               />
               <span className="text-mist text-sm">points</span>
+            </div>
+          </div>
+
+          {/* Max Points Per Attribute */}
+          <div className="space-y-2">
+            <label className="text-sm text-mist font-body">Max Points Per Attribute</label>
+            <div className="flex items-center gap-4">
+              <PointControl
+                value={maxPointsPerAttribute}
+                onChange={setMaxPointsPerAttribute}
+                min={1}
+                max={20}
+                size="md"
+                showBar={false}
+              />
+              <span className="text-mist text-sm">max per stat</span>
             </div>
           </div>
 
@@ -237,7 +255,7 @@ export default function BuilderPage() {
                 <RadarChart
                   attributes={attributes}
                   values={previewValues}
-                  maxValue={10}
+                  maxValue={maxPointsPerAttribute}
                   size={280}
                   showLabels={true}
                 />
